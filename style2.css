@@ -1,0 +1,100 @@
+body {
+    background-color: white;
+    font-family: 'Nunito Sans';
+}
+
+main {
+    margin-top: 45px;
+}
+
+main button {
+    background-color: white;
+    color: #111517;
+    font-size: 12px;
+    font-weight: 500;
+    height: 25px;
+    width: 90px;
+    cursor: pointer;
+    border-radius: 3px;
+    border: 0px;
+    text-align: center;
+    box-shadow: 0 0 5px rgba(0,0,0,0.3);
+}
+main i {
+    padding-right: 10px;
+}
+.upper-row {
+    margin-top: 40px;
+}
+.row {
+    padding:0px;
+    margin-left: 0px;
+    margin-right: 0px;
+}
+.container-fluid{
+    padding-left: 4%;
+    padding-right: 4%;
+    padding-top: 6px;
+    padding-bottom: 5px;
+}
+.col-6 {
+    margin:0px;
+    padding:0px;
+}
+.description {
+    padding-left: 4%;
+}
+.row img {
+    padding-right: 4%;
+    width: 100%;
+    object-fit: cover;
+}
+
+h3{
+    color: #111517;;
+    display: inline;
+    font-size: 12px;
+    font-weight: 300;
+}
+h2 {
+    font-weight: bold;
+}
+.title {
+font-weight: 600;
+}
+
+.border-countries {
+    margin-top: 5vw;
+    margin-bottom: 5vw;
+    color: #111517;
+    font-size: 12px;
+}
+.border {
+    background-color: white;
+    font-family: 'Nunito Sans';
+    color: #111517;
+    font-size: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    margin-left: 5px;
+    cursor: pointer;
+    border-radius: 3px;
+    border: 0px;
+    text-align: center;
+    box-shadow: 0 0 5px rgba(0,0,0,0.3);
+}
+@media (max-width: 900px) {
+    .border-countries h3 {
+      display: block;
+    }
+}
+
+@media (max-width: 650px) {
+    .col-6 {
+        width: 100%;
+        margin-bottom: 30px;
+    }
+}
+
