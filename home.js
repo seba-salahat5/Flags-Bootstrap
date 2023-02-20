@@ -11,8 +11,9 @@ let images = {'Germany':'./assets/de.svg',
 let selectedRegion = 'No Filter';
 let searchResult = [];
 let found = false;
-
-let darkMode = false;
+let elements = document.getElementsByClassName('white');
+localStorage.setItem('darkMode', false);
+let darkMode = localStorage.getItem('darkMode');
 
 async function fetchCountries(url) {
     try {
@@ -25,13 +26,6 @@ async function fetchCountries(url) {
     }catch (e) {
         console.log(e);
     }
-}
-
-function removeColumns(elementId) {
-    let rowDiv = document.getElementById(`${elementId}`);
-    let parentDiv = rowDiv.parentNode;
-    parentDiv.removeChild(rowDiv);
-    console.log("removed");
 }
 
 function filterByRegion(listId, rowId, searchFieldId){
@@ -52,8 +46,7 @@ function filterByRegion(listId, rowId, searchFieldId){
         let currentRow = document.getElementById(`${rowId}`);
         let parentElement = currentRow.parentNode;
 
-        removeColumns(rowId);
-        parentElement.appendChild(createRow(rowId, selectedRegion, searchFieldId));
+        parentElement.replaceChild(createRow(rowId, selectedRegion, searchFieldId), currentRow);
 
         };
     }
@@ -84,7 +77,6 @@ function searchCountry(fetchedContries,searchFieldId, region){
 }
 
 function createRow(rowId, region, searchFieldId) {
-    applyMode();
     console.log(region);
     let row = document.createElement('div');
     row.setAttribute('class', 'row row-cols-lg-4 row-cols-md-3  row-cols-sm-2 row-cols-1 g-5');
@@ -135,6 +127,7 @@ function createRow(rowId, region, searchFieldId) {
         console.log(e);
     });
 
+    elements = document.getElementsByClassName('white');
     return row;
 }
 
@@ -208,36 +201,44 @@ function createColumn (topImg, name, population, region, capital) {
 
     let card = createCard(topImg, name, population, region, capital);
     column.appendChild(card);
+    elements = document.getElementsByClassName('white');
     return column;
 }
 
 function switchMode() {
+    console.log(darkMode);
     darkMode = !darkMode;
     localStorage.setItem('darkMode', darkMode);
+    let body = document.body;
+    body.classList.toggle('darkmode');
+
+    if(!darkMode){
+        document.getElementById("btn").innerHTML = "Light Mode";
+    }
+    if(darkMode){
+        document.getElementById("btn").innerHTML = "Dark Mode";
+    }
     applyMode();
 
-    
 
 }
 
 function applyMode(){
-    console.log(darkMode);
-    let element = document.body;
-    element.classList.toggle("dark");
-
-    let elements = document.getElementsByClassName('white');
-    if(darkMode == true){
+    cards = document.getElementsByClassName('card');
+    if(darkMode === true){
+        console.log("helloo");
         for (let i = 0; i < elements.length; i++) {
-            console.log(elements[i].innerHTML);
-            elements[i].style.backgroundColor= "#2b3945";
-            elements[i].style.color = "white";
-        }
-    }
-    else if(darkMode == false){
-        for (let i = 0; i < elements.length; i++) {
-            console.log(elements[i].innerHTML);
             elements[i].style.backgroundColor= "white";
             elements[i].style.color = "black";
         }
+    }
+    else if(darkMode === false){
+        console.log("hii");
+        for (let i = 0; i < elements.length; i++) {
+            console.log(elements[i]);
+            elements[i].style.backgroundColor= "#2b3945";
+            elements[i].style.color = "white";
+        }
+        
     }
 }

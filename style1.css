@@ -9,10 +9,11 @@ body {
     color: #111517;
 }
 
-.dark {
+.darkmode {
     background-color: #202c37;
 	color: white;
 }
+
 .btn {
     --bs-btn-font-weight: 600;
 }
