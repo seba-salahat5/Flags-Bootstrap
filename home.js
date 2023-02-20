@@ -226,14 +226,14 @@ function switchMode() {
 function applyMode(){
     cards = document.getElementsByClassName('card');
     if(darkMode === true){
-        console.log("helloo");
+        //console.log("helloo");
         for (let i = 0; i < elements.length; i++) {
             elements[i].style.backgroundColor= "white";
             elements[i].style.color = "black";
         }
     }
     else if(darkMode === false){
-        console.log("hii");
+        //console.log("hii");
         for (let i = 0; i < elements.length; i++) {
             console.log(elements[i]);
             elements[i].style.backgroundColor= "#2b3945";
