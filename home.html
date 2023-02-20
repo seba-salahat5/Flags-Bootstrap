@@ -16,120 +16,46 @@
 
   </head>
   <body>
-    <header class="container-fluid bg-white d-flex justify-content-between px-5 py-2 shadow-sm ">
+    <header class="white container-fluid d-flex justify-content-between px-5 py-2 shadow-sm " id="header">
       <h1 class="fs-5 fw-bold">Where in the world?</h1>
-      <button class="btn fs-6"><i class="fa-regular fa-moon px-2"></i>Dark Mode</button>
+      <button class="btn fs-6" id="btn" onclick="switchMode()"><i class="fa-regular fa-moon px-2"></i>Dark Mode</button>
     </header>
     <main class="container-fluid px-5 py-2 my-4">
       <div class="d-xs-block d-sm-flex justify-content-between "> 
-        <div class="bg-white shadow-sm input-group w-auto rounded-1 mb-4">
-          <span class="input-group-text bg-white border-0"><i class="fa-solid fa-magnifying-glass fs-6"></i></span>
-          <input class="form-control me-2 border-0 rounded-1" type="search" placeholder="Search for a country..." aria-label="Search">
+        <div class="white shadow-sm input-group w-auto rounded-1 mb-4 my-4">
+          <span class="white input-group-text border-0"><i class="fa-solid fa-magnifying-glass fs-6"></i></span>
+          <input class="form-control me-2 border-0 rounded-1 white" type="search" placeholder="Search for a country..." aria-label="Search" id="searchField">
+
         </div>
-        <div class="btn-group-sm" role="group">
-          <button type="button" class="btn dropdown-toggle bg-white shadow-sm" data-bs-toggle="dropdown" aria-expanded="false">
+        <div class="btn-group-sm my-4" role="group">
+          <button type="button" class="white btn dropdown-toggle shadow-sm" data-bs-toggle="dropdown" aria-expanded="false">
             Filter by Region
           </button>
-          <ul class="dropdown-menu">
+          <ul class="dropdown-menu" id="dropdown-menu">
+            <li><a class="dropdown-item fw-semibold" href="#">No Filter</a></li>
             <li><a class="dropdown-item fw-semibold" href="#">Africa</a></li>
-            <li><a class="dropdown-item fw-semibold" href="#">America</a></li>
+            <li><a class="dropdown-item fw-semibold" href="#">Americas</a></li>
             <li><a class="dropdown-item fw-semibold" href="#">Asia</a></li>
             <li><a class="dropdown-item fw-semibold" href="#">Europe</a></li>
             <li><a class="dropdown-item fw-semibold" href="#">Oceania</a></li>
           </ul>
         </div>
       </div>
-      <div class="row row-cols-lg-4 row-cols-md-3  row-cols-sm-2 row-cols-1 g-5">
-        <div class="col">
-          <div class="card h-100">
-            <img src="./assets/de.svg" class="card-img-top" alt="Germany">
-            <div class="card-body">
-              <h5 class="card-title text-start fw-bold">Germany</h5>
-              <h6 class="text-start"><span class="fw-bold">Population: </span> 81,770,900</h6>
-              <h6 class="text-start"><span class="fw-bold">Region: </span>Europe</h6>
-              <h6 class="text-start"><span class="fw-bold">Capital: </span>Berlin</h6>
-            </div>
-          </div>
-        </div>
-        <div class="col">
-          <div class="card h-100">
-            <img src="./assets/us.svg" class="card-img-top" alt="America">
-            <div class="card-body">
-              <h5 class="card-title text-start fw-bold">United States of America</h5>
-              <h6 class="text-start"><span class="fw-bold">Population: </span> 323,947,000</h6>
-              <h6 class="text-start"><span class="fw-bold">Region: </span>Americas</h6>
-              <h6 class="text-start"><span class="fw-bold">Capital: </span>Washington, D.C.</h6>
-            </div>
-          </div>
-        </div>
-        <div class="col">
-          <div class="card h-100">
-            <img src="./assets/br.svg" class="card-img-top" alt="Brazil">
-            <div class="card-body">
-              <h5 class="card-title text-start fw-bold">Brazil</h5>
-              <h6 class="text-start"><span class="fw-bold">Population: </span> 206,135,893</h6>
-              <h6 class="text-start"><span class="fw-bold">Region: </span>Americas</h6>
-              <h6 class="text-start"><span class="fw-bold">Capital: </span>Brasilia</h6>
-            </div>
-          </div>
-        </div>
-        <div class="col">
-          <div class="card h-100">
-            <img src="./assets/is.svg" class="card-img-top" alt="Iceland">
-            <div class="card-body">
-              <h5 class="card-title text-start fw-bold">Iceland</h5>
-              <h6 class="text-start"><span class="fw-bold">Population: </span> 334,300</h6>
-              <h6 class="text-start"><span class="fw-bold">Region: </span>Europe</h6>
-              <h6 class="text-start"><span class="fw-bold">Capital: </span>Reykjavik</h6>
-            </div>
-          </div>
-        </div>
-        <div class="col">
-          <div class="card h-100">
-            <img src="./assets/af.svg" class="card-img-top" alt="Afghanistan">
-            <div class="card-body">
-              <h5 class="card-title text-start fw-bold">Afghanistan</h5>
-              <h6 class="text-start"><span class="fw-bold">Population: </span> 27,657,145</h6>
-              <h6 class="text-start"><span class="fw-bold">Region: </span>Asia</h6>
-              <h6 class="text-start"><span class="fw-bold">Capital: </span>Kabul</h6>
-            </div>
-          </div>
-        </div>
-        <div class="col">
-          <div class="card h-100">
-            <img src="./assets/ax.svg" class="card-img-top" alt="Aland Islands">
-            <div class="card-body">
-              <h5 class="card-title text-start fw-bold">Aland Islands</h5>
-              <h6 class="text-start"><span class="fw-bold">Population: </span> 28,875</h6>
-              <h6 class="text-start"><span class="fw-bold">Region: </span>Europe</h6>
-              <h6 class="text-start"><span class="fw-bold">Capital: </span>Mariehamn</h6>
-            </div>
-          </div>
-        </div>
-        <div class="col">
-          <div class="card h-100">
-            <img src="./assets/al.svg" class="card-img-top" alt="Albania">
-            <div class="card-body">
-              <h5 class="card-title text-start fw-bold">Albania</h5>
-              <h6 class="text-start"><span class="fw-bold">Population: </span> 2,886,026</h6>
-              <h6 class="text-start"><span class="fw-bold">Region: </span>Europe</h6>
-              <h6 class="text-start"><span class="fw-bold">Capital: </span>Tirana</h6>
-            </div>
-          </div>
-        </div>
-        <div class="col">
-          <div class="card h-100">
-            <img src="./assets/dz.svg" class="card-img-top" alt="Algeria">
-            <div class="card-body">
-              <h5 class="card-title text-start fw-bold">Algeria</h5>
-              <h6 class="text-start"><span class="fw-bold">Population: </span> 40,400,000</h6>
-              <h6 class="text-start"><span class="fw-bold">Region: </span>Africa</h6>
-              <h6 class="text-start"><span class="fw-bold">Capital: </span>Algiers</h6>
-            </div>
-          </div>
-        </div>
+      <div class="row row-cols-lg-4 row-cols-md-3  row-cols-sm-2 row-cols-1 g-5" id="row">
       </div>
     </main>
+    <script src="home.js"></script>
+    <script>
+      filterByRegion('#dropdown-menu li a', 'row', 'searchField');
+      
+      /*document.getElementById("btn").addEventListener("click", displayDate);
+
+      function displayDate() {
+        let text = "Light Mode";
+        document.getElementById("btn").innerHTML = text;
+        text = "Dark Mode";
+      }*/
+    </script>
   </body>
 </html>
 
