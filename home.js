@@ -65,7 +65,6 @@ function searchCountry(fetchedContries,searchFieldId, region){
 
 
     searchTextField.addEventListener('keyup', (e) => {
-        //console.log(`before:  ${searchResult.length}`);
         searchResult.splice(0,searchResult.length)
         if (`${e.key}` === 'Backspace'){
             inputStr = inputStr.slice(0, inputStr.length -1);            
@@ -74,10 +73,7 @@ function searchCountry(fetchedContries,searchFieldId, region){
             inputStr = inputStr + `${e.key}`;
             for(countryName of Object.values(fetchedContries)){
                 countryName = countryName.name.common;
-                //countryName = countryName.toLowerCase();
-                //inputStr = inputStr.toLowerCase();
                 if(countryName.toLowerCase().startsWith(inputStr.toLowerCase()) && ((countryName.region === region) || (region === 'No Filter')) ){
-                    //console.log(inputStr);
                     console.log(countryName);
                     searchResult.push(countryName);
                     console.log(searchResult.length);
@@ -85,8 +81,6 @@ function searchCountry(fetchedContries,searchFieldId, region){
             }
         }
     });
-
-    //return searchResult;
 }
 
 function createRow(rowId, region, searchFieldId) {

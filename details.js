@@ -55,21 +55,3 @@ function createH3 (str) {
     element.innerText = str;
     return element;
 }
-
-/*function switchMode() {
-    let mode = true;
-    let element = document.body;
-    element.classList.toggle("dark");
-
-    let elements = document.getElementsByClassName('white');
-
-    if(mode){
-
-        for (let i = 0; i < elements.length; i++) {
-            console.log(elements[i].innerHTML);
-            elements[i].style.backgroundColor= "#2b3945";
-            elements[i].style.color = "white";
-        }
-        mode = !mode;
-    }
-}*/
