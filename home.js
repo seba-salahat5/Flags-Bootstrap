@@ -1,18 +1,11 @@
 let APIUrl = 'https://restcountries.com/v3.1';
-let countriesList = ['Germany','United States', 'Brazil', 'Iceland', 'Afghanistan', 'Åland Islands', 'Albania', 'Algeria'];
-let images = {'Germany':'./assets/de.svg',
-              'United States':'./assets/us.svg',
-              'Brazil':'./assets/br.svg',
-              'Iceland':'./assets/is.svg',
-              'Afghanistan':'./assets/af.svg',
-              'Åland Islands':'./assets/ax.svg',
-              'Albania':'./assets/al.svg',
-              'Algeria':'./assets/dz.svg'};
 let selectedRegion = 'No Filter';
 let searchResult = [];
 let found = false;
 let elements = document.getElementsByClassName('white');
-localStorage.setItem('darkMode', false);
+
+var countryDetails;
+//localStorage.setItem('darkMode', false);
 let darkMode = localStorage.getItem('darkMode');
 
 async function fetchCountries(url) {
@@ -58,7 +51,7 @@ function searchCountry(fetchedContries,searchFieldId, region){
 
 
     searchTextField.addEventListener('keyup', (e) => {
-        searchResult.splice(0,searchResult.length)
+        searchResult.splice(0,searchResult.length);
         if (`${e.key}` === 'Backspace'){
             inputStr = inputStr.slice(0, inputStr.length -1);            
         }
@@ -75,30 +68,31 @@ function searchCountry(fetchedContries,searchFieldId, region){
         }
     });
 }
-
+function DisplayDetails(countryName) {
+    countryDetails = countryName;
+    console.log(`${countryName}`);
+    window.location.replace(`https://seba-salahat5.github.io/Flags-Bootstrap/details`);
+}
 function createRow(rowId, region, searchFieldId) {
     console.log(region);
     let row = document.createElement('div');
     row.setAttribute('class', 'row row-cols-lg-4 row-cols-md-3  row-cols-sm-2 row-cols-1 g-5');
     row.setAttribute('id', `${rowId}`);
 
-    fetchCountries(`${APIUrl}/all?fields=name,population,region,capital`).then( countries => {
+    fetchCountries(`${APIUrl}/all?fields=name,population,region,capital,flags`).then( countries => {
         if(!countries) {
             card.innerText = 'No results Found';
             return;
         }
-
         //search filtering
         searchCountry(countries,searchFieldId, region);
         //region filtering
         if(searchResult.length === 0){
             console.log(searchResult.length);
-            for(let i=0; i<countriesList.length; i++){
-                for(let country of countries) {
-                    if(countriesList[i] === country.name.common && ( (country.region === region) || (region === 'No Filter') )){
-                        row.appendChild(createColumn(images[`${country.name.common}`], country.name.common, country.population, country.region, country.capital));
-                        found = true;
-                    }
+            for(let country of countries) {
+                if((country.region === region) || (region === 'No Filter') ){
+                    row.appendChild(createColumn(country.flags.svg, country.name.common, country.population, country.region, country.capital));
+                    found = true;
                 }
             }
             if(!found){
@@ -111,7 +105,7 @@ function createRow(rowId, region, searchFieldId) {
             for(let i=0; i<searchResult.length; i++){
                 for(let country of countries) {
                     if(searchResult[i] === country.name.common && ( (country.region === region) || (region === 'No Filter') )){
-                        row.appendChild(createColumn(images[`${country.name.common}`], country.name.common, country.population, country.region, country.capital));
+                        row.appendChild(createColumn(country.flags.svg, country.name.common, country.population, country.region, country.capital));
                         found = true;
                     }
                 }
@@ -126,8 +120,6 @@ function createRow(rowId, region, searchFieldId) {
     }).catch( e=> {
         console.log(e);
     });
-
-    elements = document.getElementsByClassName('white');
     return row;
 }
 
@@ -172,6 +164,7 @@ function createImg (src, alt) {
 function createCard (topImg, countryName, countryPopulation, countryRegion, countryCapital) {
     let card = document.createElement('div');
     card.setAttribute('class', 'card h-100 white');
+    card.setAttribute('onclick', `DisplayDetails(${countryName})`);
     applyMode();
 
     let img = createImg(topImg, countryName);

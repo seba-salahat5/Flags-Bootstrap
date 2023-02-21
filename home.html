@@ -28,7 +28,7 @@
 
         </div>
         <div class="btn-group-sm my-4" role="group">
-          <button type="button" class="white btn dropdown-toggle shadow-sm" data-bs-toggle="dropdown" aria-expanded="false">
+          <button type="button" class="white btn dropdown-toggle shadow-sm" onclick="filterByRegion('#dropdown-menu li a', 'row', 'searchField')" data-bs-toggle="dropdown" aria-expanded="false">
             Filter by Region
           </button>
           <ul class="white dropdown-menu" id="dropdown-menu">
@@ -46,7 +46,10 @@
     </main>
     <script src="home.js"></script>
     <script>
-      filterByRegion('#dropdown-menu li a', 'row', 'searchField');
+      //filterByRegion('#dropdown-menu li a', 'row', 'searchField');
+      let currentRow = document.getElementById('row');
+      let parentElement = currentRow.parentNode;
+      parentElement.replaceChild(createRow('row', 'No Filter', 'searchField'), currentRow);
     </script>
   </body>
 </html>
