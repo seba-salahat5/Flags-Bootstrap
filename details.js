@@ -1,52 +1,58 @@
-let apiUrl = 'https://restcountries.com/v3.1/name/';
-let fields = ['name', 'native', 'population', 'region', 'subRegion' , 'capital' , 'tld', 'currencies', 'languages','flags']
+let apiUrl = 'https://restcountries.com/v3.1/alpha/';
+let fields = ['name', 'native', 'population', 'region', 'subRegion' , 'capital' , 'tld', 'currencies', 'languages']
 
-async function fetchDetails(name) {
+async function fetchDetails(code) {
     try {
-        let response = await fetch(`${apiUrl}${name}/?fields=name,population,region,subregion,capital,tld,currencies,languages,flags`);
-
+        console.log(code);
+        let response = await fetch(`${apiUrl}${code}`);
         if(!response.ok) {
             throw new Error(`Failed to fetch the country details: ${response.status}`);
         }
         return await response.json();
+
     }catch (e) {
         console.log(e);
     }
 
 } 
 
-function displayDetails (elementId, flagDiv) {
+function displayDetails (elementId, flagDiv, countryCode, fetchDetails) {
     let ImageDiv =  document.getElementById(`${flagDiv}`);
 
     let detailsColumn = document.getElementById(`${elementId}`);
-    fetchDetails(window.countryName).then( details => {
+    fetchDetails(countryCode).then( details => {
         if(!details) {
             detailsColumn.innerText = 'No results Found';
             return;
         }
 
-        let flag = createImg(details[0].flags.svg, details[0].name.common);
+        let flag = create_Img(details[0].flags.svg, details[0].name.common);
         ImageDiv.appendChild(flag);
-
+        
         let inner_text = [
             `${details[0].name.common}`,
-            `${details[0].name.nativeName.nld.common}`,
+            `${Object.entries(details[0].name.nativeName)[0][1].common}`,
             `${details[0].population}`,
             `${details[0].region}`,
             `${details[0].subregion}`,
             `${details[0].capital}`,
             `${details[0].tld}`,
-            `${details[0].currencies.EUR.name}`,
+            `${Object.entries(details[0].currencies)[0][1].name}`,
             `${Object.values(details[0].languages).join(', ')}`,
         ]
+
         for( let i=0; i< fields.length; i++)
         {
-            document.getElementById(`${elementId}-${fields[i]}`).innerText = inner_text[i];
+            //console.log(document.getElementById(`${fields[i]}`));
+            document.getElementById(`${fields[i]}`).innerText = inner_text[i];
         }
+        applyMode(localStorage.getItem('darkMode'));
         
     }).catch( e =>  {console.log(e);});
 }
 
+
+//view 
 function createH2 (str) {
     let element = document.createElement('h2');
     element.setAttribute ('class', 'fw-bold');
@@ -61,7 +67,7 @@ function createH3 (str) {
     return element;
 }
 
-function createImg (src,alt) {
+function create_Img (src,alt) {
     let img = document.createElement('img');
     img.setAttribute('class', 'img-fluid');
     img.setAttribute('src', `${src}`);

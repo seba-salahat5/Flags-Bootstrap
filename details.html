@@ -20,7 +20,7 @@
         <button class="btn fs-6" onclick="switchMode()" id="btn"><i class="fa-regular fa-moon px-2"></i>Dark Mode</button>
     </header>
     <main class="container-fluid px-5 py-5">
-        <button type="button" class="btn white shadow-sm fs-6 px-4" onclick="window.location.replace('https://seba-salahat5.github.io/Flags-Bootstrap/home');">
+        <button type="button" class="btn white shadow-sm fs-6 px-4" onclick="window.location.replace('file:///C:/Users/hp/Desktop/Flags-Bootstrap/home.html');">
             <i class="fa-solid fa-arrow-left-long px-2"></i>Back
         </button>
         <div class="row g-5 my-1">
@@ -28,19 +28,19 @@
               
             </div>          
             <div class="col-12 col-sm-12 col-md-6 col-lg-6" id="details">
-                <h2 class="fw-bold" id="details-name"></h2>
+                <h2 class="fw-bold" id="name"></h2>
                 <div class="row">
                     <div class="my-4 col-12 col-sm-12 col-md-6 col-lg-6">
-                        <dt><h3 class="card-text fs-6 fw-semibold d-inline py-3">Native Name: </h3><h3 class="card-text fs-6 fw-normal d-inline py-3" id="details-native"></h3></dt>
-                        <dt><h3 class="card-text fs-6 fw-semibold d-inline py-3">Population: </h3><h3 class="card-text fs-6 fw-normal d-inline py-3" id="details-population"></h3></dt>
-                        <dt><h3 class="card-text fs-6 fw-semibold d-inline py-3">Region: </h3><h3 class="card-text fs-6 fw-normal d-inline py-3" id="details-region"></h3></dt>
-                        <dt><h3 class="card-text fs-6 fw-semibold d-inline py-3">Sub Region: </h3><h3 class="card-text fs-6 fw-normal d-inline py-3" id="details-subRegion"></h3></dt>
-                        <dt><h3 class="card-text fs-6 fw-semibold d-inline py-3">Capital: </h3><h3 class="card-text fs-6 fw-normal d-inline py-3" id="details-capital"></h3></dt>
+                        <dt><h3 class="card-text fs-6 fw-semibold d-inline py-3">Native Name: </h3><h3 class="card-text fs-6 fw-normal d-inline py-3" id="native"></h3></dt>
+                        <dt><h3 class="card-text fs-6 fw-semibold d-inline py-3">Population: </h3><h3 class="card-text fs-6 fw-normal d-inline py-3" id="population"></h3></dt>
+                        <dt><h3 class="card-text fs-6 fw-semibold d-inline py-3">Region: </h3><h3 class="card-text fs-6 fw-normal d-inline py-3" id="region"></h3></dt>
+                        <dt><h3 class="card-text fs-6 fw-semibold d-inline py-3">Sub Region: </h3><h3 class="card-text fs-6 fw-normal d-inline py-3" id="subRegion"></h3></dt>
+                        <dt><h3 class="card-text fs-6 fw-semibold d-inline py-3">Capital: </h3><h3 class="card-text fs-6 fw-normal d-inline py-3" id="capital"></h3></dt>
                     </div>     
                     <div class="my-4 col-12 col-sm-12 col-md-6 col-lg-6">
-                        <dt><h3 class="card-text fs-6 fw-semibold d-inline py-3">Top Level Domain: </h3><h3 class="card-text fs-6 fw-normal d-inline py-3" id="details-tld"></h3></dt>
-                        <dt><h3 class="card-text fs-6 fw-semibold d-inline py-3">Currencies: </h3><h3 class="card-text fs-6 fw-normal d-inline py-3" id="details-currencies"></h3></dt>
-                        <dt><h3 class="card-text fs-6 fw-semibold d-inline py-3">Languages: </h3><h3 class="card-text fs-6 fw-normal d-inline py-3" id="details-languages"></h3></dt>            
+                        <dt><h3 class="card-text fs-6 fw-semibold d-inline py-3">Top Level Domain: </h3><h3 class="card-text fs-6 fw-normal d-inline py-3" id="tld"></h3></dt>
+                        <dt><h3 class="card-text fs-6 fw-semibold d-inline py-3">Currencies: </h3><h3 class="card-text fs-6 fw-normal d-inline py-3" id="currencies"></h3></dt>
+                        <dt><h3 class="card-text fs-6 fw-semibold d-inline py-3">Languages: </h3><h3 class="card-text fs-6 fw-normal d-inline py-3" id="languages"></h3></dt>            
                     </div>
                 </div>
                 <div class="col-12 col-sm-12 col-md-6 col-lg-6 d-inline">
@@ -56,7 +56,9 @@
     <script src="details.js"></script>
     <script src="home.js"></script>
     <script>
-      displayDetails ('details','flag');
+        let parameter = new URLSearchParams(window.location.search);
+        let countryCode = parameter.get("countryCode");
+        displayDetails ('details','flag', `${countryCode}`, fetchDetails);
     </script>
   </body>
 </html>
