@@ -1,8 +1,9 @@
-function initial(rowId, searchFieldId) {
+async function initial(rowId, searchFieldId, menuID) {
     let APIUrl = 'https://restcountries.com/v3.1';
     let countries = [];
     let selectedRegion = 'No Filter';
     let inputStr = '';
+    
     fetchCountries(`${APIUrl}/all`).then( responseData => {
         if(!responseData) {
             return;
@@ -16,10 +17,34 @@ function initial(rowId, searchFieldId) {
     }).catch( e=> {
         console.log(e);
     });
-    //loadCountries(APIUrl,inputStr, rowId, selectedRegion);
-    searchEvent(searchFieldId,inputStr, async (APIUrl,inputStr, rowId, selectedRegion) => {
-        countries = await loadCountries(APIUrl,inputStr, rowId, selectedRegion);
+
+    searchEvent(searchFieldId,inputStr, async (inputStr) => {
+        let searchResult = [];
+        loadCountries(APIUrl,inputStr,rowId, selectedRegion).then (res =>{
+            if(!res) {
+                console.log("error");
+                return;
+            }
+
+            for(let country of res) {
+                if(country.region == selectedRegion || selectedRegion == 'No Filter'){
+                    searchResult.push(country);
+                }
+            }
+            countries = searchResult;
+            displayCountries(rowId, countries);
+            //console.log(countries.length);
+        });
     });
+
+    selectFilter(menuID, selectedRegion, (filter)=> {
+        selectedRegion = filter;
+        console.log("inside call back"+ selectedRegion);
+        let filteredCountries = filterCountries(selectedRegion,countries);
+        displayCountries(rowId, filteredCountries);
+    })
+
+    
 }
 
 async function fetchCountries(url) {
@@ -61,7 +86,7 @@ function displayCountries(rowId, fetchedCountries){
     applyMode(localStorage.getItem('darkMode'));
 }
 
-function selectFilter (listId ,cb) {
+function selectFilter (listId,selectedRegion ,cb) {
     let items = document.querySelectorAll(listId);
     let tab =[];
 
@@ -74,9 +99,9 @@ function selectFilter (listId ,cb) {
         index = tab.indexOf(this.innerHTML);
         selectedRegion = this.innerHTML;
         console.log(this.innerHTML + " index: "+ index);
+        cb(selectedRegion);
         };
     }
-    cb();
 
 }
 
@@ -102,31 +127,20 @@ function searchEvent (searchFieldId,inputStr, cb){
             inputStr = inputStr + `${e.key}`;
         }
         console.log(inputStr);
-        cb();
+        cb(inputStr);
     });
 }
 
-function loadCountries(APIUrl,searchValue, rowId, selectedRegion){
+function loadCountries(APIUrl,searchValue){
     console.log("loading");
-    let searchResult = [];
+    console.log("APIUrl: "+APIUrl);
+    console.log("searchValue: "+ searchValue);
+
+   
     let url = '';
     searchValue == ''? url = `${APIUrl}/all` : url= `${APIUrl}/name/${searchValue}`
-    fetchCountries(url).then(response => {
-        if(!response) {
-            console.log("error");
-            return;
-        }
-
-        for(let country of response) {
-            if(country.region == selectedRegion || selectedRegion == 'No Filter'){
-                searchResult.push(country);
-            }
-        }
-        console.log(searchResult.length);
-        //filterCountries(selectedRegion,searchResult);
-        displayCountries(rowId, searchResult);
-        return searchResult;
-    }).catch( e=> {
+    return fetchCountries(url).then( (response) => response)
+    .catch( e => {
         console.log(e);
     });
 }

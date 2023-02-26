@@ -31,9 +31,7 @@
           <button type="button" class="white btn dropdown-toggle shadow-sm" data-bs-toggle="dropdown" aria-expanded="false">
             Filter by Region
           </button>
-          <ul class="white dropdown-menu" id="dropdown-menu" onclick="selectFilter('#dropdown-menu li a',()=>{
-            let filteredCountries = filterCountries(selectedRegion,countries);
-            displayCountries('row', filteredCountries);})">
+          <ul class="white dropdown-menu" id="dropdown-menu" onclick="selectFilter">
             <li><a class="dropdown-item fw-semibold" href="#">No Filter</a></li>
             <li><a class="dropdown-item fw-semibold" href="#">Africa</a></li>
             <li><a class="dropdown-item fw-semibold" href="#">Americas</a></li>
@@ -48,7 +46,7 @@
     </main>
     <script src="home.js"></script>
     <script>
-      initial('row','searchField');
+      initial('row','searchField', '#dropdown-menu li a');
     </script>
   </body>
 </html>
