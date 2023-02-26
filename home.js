@@ -1,7 +1,8 @@
-let countries = [];
-let selectedRegion = 'No Filter';
 function initial(rowId, searchFieldId) {
     let APIUrl = 'https://restcountries.com/v3.1';
+    let countries = [];
+    let selectedRegion = 'No Filter';
+    let inputStr = '';
     fetchCountries(`${APIUrl}/all`).then( responseData => {
         if(!responseData) {
             return;
@@ -15,8 +16,10 @@ function initial(rowId, searchFieldId) {
     }).catch( e=> {
         console.log(e);
     });
-
-    searchEvent(APIUrl,searchFieldId, rowId);
+    //loadCountries(APIUrl,inputStr, rowId, selectedRegion);
+    searchEvent(searchFieldId,inputStr, async (APIUrl,inputStr, rowId, selectedRegion) => {
+        countries = await loadCountries(APIUrl,inputStr, rowId, selectedRegion);
+    });
 }
 
 async function fetchCountries(url) {
@@ -88,8 +91,8 @@ function filterCountries(region, allCountries){
     return filteredCountries;
 }
 
-function searchEvent (APIUrl,searchFieldId, rowId){
-    let inputStr ='';
+function searchEvent (searchFieldId,inputStr, cb){
+    //let inputStr ='';
     let searchTextField = document.getElementById(`${searchFieldId}`);
     searchTextField.addEventListener('keyup', async (e) => {
         if (`${e.key}` === 'Backspace'){
@@ -99,17 +102,18 @@ function searchEvent (APIUrl,searchFieldId, rowId){
             inputStr = inputStr + `${e.key}`;
         }
         console.log(inputStr);
-        loadCountries(APIUrl,inputStr, rowId);
+        cb();
     });
 }
 
-function loadCountries(APIUrl,searchValue, rowId){
+function loadCountries(APIUrl,searchValue, rowId, selectedRegion){
     console.log("loading");
     let searchResult = [];
     let url = '';
     searchValue == ''? url = `${APIUrl}/all` : url= `${APIUrl}/name/${searchValue}`
     fetchCountries(url).then(response => {
         if(!response) {
+            console.log("error");
             return;
         }
 
@@ -133,7 +137,7 @@ function DisplayDetails(countryCode) {
     let parameter = new URLSearchParams();
     parameter.append("countryCode", `${countryCode}`);
     console.log(countryCode);
-    location.href = "file:///C:/Users/hp/Desktop/Flags-Bootstrap/details.html?" + parameter.toString();
+    location.href = "https://seba-salahat5.github.io/Flags-Bootstrap/details?" + parameter.toString();
 }
 
 // dark mode
