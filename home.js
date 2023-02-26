@@ -3,20 +3,6 @@ async function initial(rowId, searchFieldId, menuID) {
     let countries = [];
     let selectedRegion = 'No Filter';
     let inputStr = '';
-    
-    fetchCountries(`${APIUrl}/all`).then( responseData => {
-        if(!responseData) {
-            return;
-        }
-
-        for(let country of responseData) {
-            countries.push(country);
-        }
-        displayCountries (rowId,countries);
-        console.log(countries.length);
-    }).catch( e=> {
-        console.log(e);
-    });
 
     searchEvent(searchFieldId,inputStr, async (inputStr) => {
         let searchResult = [];
@@ -42,7 +28,25 @@ async function initial(rowId, searchFieldId, menuID) {
         console.log("inside call back"+ selectedRegion);
         let filteredCountries = filterCountries(selectedRegion,countries);
         displayCountries(rowId, filteredCountries);
-    })
+    });
+
+    fetchCountries(`${APIUrl}/all`).then( responseData => {
+        if(!responseData) {
+            return;
+        }
+
+        for(let country of responseData) {
+            countries.push(country);
+        }
+        displayCountries (rowId,countries);
+        console.log(countries.length);
+    }).catch( e=> {
+        console.log(e);
+    });
+
+    countries = filterCountries(selectedRegion,countries);
+    displayCountries(rowId, countries);
+
 
     
 }
