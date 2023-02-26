@@ -132,7 +132,7 @@ function loadCountries(APIUrl,searchValue, rowId, selectedRegion){
 }
 
 
-
+ 
 function DisplayDetails(countryCode) {
     let parameter = new URLSearchParams();
     parameter.append("countryCode", `${countryCode}`);

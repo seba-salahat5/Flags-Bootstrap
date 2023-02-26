@@ -11,7 +11,7 @@ let darkMode = localStorage.getItem('darkMode');
 
 async function fetchCountries(url) {
     try {
-        let response = await fetch(`${url}`);
+        let response  = await fetch(`${url}`);
 
         if(!response.ok) {
             throw new Error(`Failed to fetch countries: ${response.status}`);

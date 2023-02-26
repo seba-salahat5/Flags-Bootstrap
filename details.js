@@ -11,7 +11,7 @@ async function fetchDetails(code) {
         return await response.json();
 
     }catch (e) {
-        console.log(e);
+        console.log(e); 
     }
 
 } 

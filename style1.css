@@ -12,7 +12,7 @@ body {
 .darkmode {
     background-color: #202c37;
 	color: white;
-}
+} 
 
 .btn {
     --bs-btn-font-weight: 600;
