@@ -154,7 +154,9 @@ function DisplayDetails(countryCode) {
     let parameter = new URLSearchParams();
     parameter.append("countryCode", `${countryCode}`);
     console.log(countryCode);
-    location.href = "file:///C:/Users/hp/Desktop/Flags-Bootstrap/details.html?" + parameter.toString();
+    //location.href = "file:///C:/Users/hp/Desktop/Flags-Bootstrap/details.html?" + parameter.toString();
+    location.href = "https://seba-salahat5.github.io/Flags-Bootstrap/details?" + parameter.toString();
+    
 }
 
 // dark mode
