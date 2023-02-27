@@ -18,7 +18,7 @@ async function initial(rowId, searchFieldId, menuID) {
                 }
             }
             countries = searchResult;
-            displayCountries(rowId, countries);
+            displayCountries(rowId, countries, ()=> applyMode());
             //console.log(countries.length);
         });
     });
@@ -27,7 +27,7 @@ async function initial(rowId, searchFieldId, menuID) {
         selectedRegion = filter;
         console.log("inside call back"+ selectedRegion);
         let filteredCountries = filterCountries(selectedRegion,countries);
-        displayCountries(rowId, filteredCountries);
+        displayCountries(rowId, filteredCountries, ()=> applyMode());
     });
 
     fetchCountries(`${APIUrl}/all`).then( responseData => {
@@ -38,14 +38,14 @@ async function initial(rowId, searchFieldId, menuID) {
         for(let country of responseData) {
             countries.push(country);
         }
-        displayCountries (rowId,countries);
+        displayCountries (rowId,countries, ()=> applyMode());
         console.log(countries.length);
     }).catch( e=> {
         console.log(e);
     });
 
     countries = filterCountries(selectedRegion,countries);
-    displayCountries(rowId, countries);
+    displayCountries(rowId, countries, ()=> applyMode());
 
 
     
@@ -64,7 +64,7 @@ async function fetchCountries(url) {
     }
 }
 
-function displayCountries(rowId, fetchedCountries){
+function displayCountries(rowId, fetchedCountries, cb){
     let currentRow = document.getElementById(rowId);
     let parentElement = currentRow.parentNode;
 
@@ -74,7 +74,6 @@ function displayCountries(rowId, fetchedCountries){
         newRow.appendChild(msg);
         parentElement.removeChild(currentRow);
         parentElement.appendChild(newRow);
-        applyMode(localStorage.getItem('darkMode'));
         return;
     }
 
@@ -87,7 +86,7 @@ function displayCountries(rowId, fetchedCountries){
     }
     parentElement.removeChild(currentRow);
     parentElement.appendChild(newRow);
-    applyMode(localStorage.getItem('darkMode'));
+    cb();
 }
 
 function selectFilter (listId,selectedRegion ,cb) {
@@ -165,13 +164,13 @@ function switchMode() {
 
     darkMode == 'true' ? darkMode = 'false' : darkMode='true';
     localStorage.setItem('darkMode', darkMode);
-    applyMode(darkMode);
+    applyMode();
 
 
 }
 
-function applyMode(darkMode){
-    
+function applyMode(){
+    let darkModeStatus = localStorage.getItem('darkMode');
     let body = document.body;
     let elements = document.querySelectorAll(".white"); 
 
@@ -182,7 +181,7 @@ function applyMode(darkMode){
     body.style.backgroundColor = "#fafafa";
     body.style.color = "#111517";
 
-    if(darkMode == 'true'){
+    if(darkModeStatus == 'true'){
         document.getElementById("btn").innerHTML = "Light Mode";
         body.style.backgroundColor = "#202c37";
         body.style.color = "white";

@@ -43,11 +43,11 @@
                         <dt><h3 class="card-text fs-6 fw-semibold d-inline py-3">Languages: </h3><h3 class="card-text fs-6 fw-normal d-inline py-3" id="languages"></h3></dt>            
                     </div>
                 </div>
-                <div class="col-12 col-sm-12 col-md-6 col-lg-6 d-inline">
+                <div class="col-12 col-sm-12 col-md-6 col-lg-6 d-inline" id="border-countries">
                     <h3 class="card-text fs-6 fw-semibold py-3 d-lg-inline d-sm-block">Border Countries:</h3>
-                    <button type="button" class="btn white shadow-sm d-inline">France</button>
+                    <!--<button type="button" class="btn white shadow-sm d-inline">France</button>
                     <button type="button" class="btn white shadow-sm d-inline">Germany</button>
-                    <button type="button" class="btn white shadow-sm d-inline">Netherlands</button>
+                    <button type="button" class="btn white shadow-sm d-inline">Netherlands</button>-->
                 </div>
                 
             </div>
@@ -58,7 +58,7 @@
     <script>
         let parameter = new URLSearchParams(window.location.search);
         let countryCode = parameter.get("countryCode");
-        displayDetails ('details','flag', `${countryCode}`, fetchDetails);
+        init ('details','flag', `${countryCode}`, 'border-countries');
     </script>
   </body>
 </html>
