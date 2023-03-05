@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="en">
-  <head>
+
+<head>
     <title>details</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -13,40 +14,67 @@
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;600;800&display=swap" rel="stylesheet">
     <link href="style1.css" rel="stylesheet">
 
-  </head> 
-  <body>
+</head>
+
+<body>
     <header class="container-fluid white d-flex justify-content-between px-5 py-2 shadow-sm ">
         <h1 class="fs-5 fw-bold">Where in the world?</h1>
-        <button class="btn fs-6" onclick="switchMode()" id="btn"><i class="fa-regular fa-moon px-2"></i>Dark Mode</button>
+        <button class="btn fs-6" onclick="switchMode()" id="btn"><i class="fa-regular fa-moon px-2"></i>Dark
+            Mode</button>
     </header>
     <main class="container-fluid px-5 py-5">
-        <button type="button" class="btn white shadow-sm fs-6 px-4" onclick="window.location.replace('https://seba-salahat5.github.io/Flags-Bootstrap/home');">
+        <button type="button" class="btn white shadow-sm fs-6 px-4"
+            onclick="window.location.replace('file:///C:/Users/hp/Desktop/Flags-Bootstrap/home.html');">
             <i class="fa-solid fa-arrow-left-long px-2"></i>Back
         </button>
         <div class="row g-5 my-1">
             <div class="col-12 col-sm-12 col-md-6 col-lg-6" id="flag">
-              
-            </div>          
+
+            </div>
             <div class="col-12 col-sm-12 col-md-6 col-lg-6" id="details">
                 <h2 class="fw-bold" id="name"></h2>
                 <div class="row">
                     <div class="my-4 col-12 col-sm-12 col-md-6 col-lg-6">
-                        <dt><h3 class="card-text fs-6 fw-semibold d-inline py-3">Native Name: </h3><h3 class="card-text fs-6 fw-normal d-inline py-3" id="native"></h3></dt>
-                        <dt><h3 class="card-text fs-6 fw-semibold d-inline py-3">Population: </h3><h3 class="card-text fs-6 fw-normal d-inline py-3" id="population"></h3></dt>
-                        <dt><h3 class="card-text fs-6 fw-semibold d-inline py-3">Region: </h3><h3 class="card-text fs-6 fw-normal d-inline py-3" id="region"></h3></dt>
-                        <dt><h3 class="card-text fs-6 fw-semibold d-inline py-3">Sub Region: </h3><h3 class="card-text fs-6 fw-normal d-inline py-3" id="subRegion"></h3></dt>
-                        <dt><h3 class="card-text fs-6 fw-semibold d-inline py-3">Capital: </h3><h3 class="card-text fs-6 fw-normal d-inline py-3" id="capital"></h3></dt>
-                    </div>     
+                        <dt>
+                            <h3 class="card-text fs-6 fw-semibold d-inline py-3">Native Name: </h3>
+                            <h3 class="card-text fs-6 fw-normal d-inline py-3" id="native"></h3>
+                        </dt>
+                        <dt>
+                            <h3 class="card-text fs-6 fw-semibold d-inline py-3">Population: </h3>
+                            <h3 class="card-text fs-6 fw-normal d-inline py-3" id="population"></h3>
+                        </dt>
+                        <dt>
+                            <h3 class="card-text fs-6 fw-semibold d-inline py-3">Region: </h3>
+                            <h3 class="card-text fs-6 fw-normal d-inline py-3" id="region"></h3>
+                        </dt>
+                        <dt>
+                            <h3 class="card-text fs-6 fw-semibold d-inline py-3">Sub Region: </h3>
+                            <h3 class="card-text fs-6 fw-normal d-inline py-3" id="subRegion"></h3>
+                        </dt>
+                        <dt>
+                            <h3 class="card-text fs-6 fw-semibold d-inline py-3">Capital: </h3>
+                            <h3 class="card-text fs-6 fw-normal d-inline py-3" id="capital"></h3>
+                        </dt>
+                    </div>
                     <div class="my-4 col-12 col-sm-12 col-md-6 col-lg-6">
-                        <dt><h3 class="card-text fs-6 fw-semibold d-inline py-3">Top Level Domain: </h3><h3 class="card-text fs-6 fw-normal d-inline py-3" id="tld"></h3></dt>
-                        <dt><h3 class="card-text fs-6 fw-semibold d-inline py-3">Currencies: </h3><h3 class="card-text fs-6 fw-normal d-inline py-3" id="currencies"></h3></dt>
-                        <dt><h3 class="card-text fs-6 fw-semibold d-inline py-3">Languages: </h3><h3 class="card-text fs-6 fw-normal d-inline py-3" id="languages"></h3></dt>            
+                        <dt>
+                            <h3 class="card-text fs-6 fw-semibold d-inline py-3">Top Level Domain: </h3>
+                            <h3 class="card-text fs-6 fw-normal d-inline py-3" id="tld"></h3>
+                        </dt>
+                        <dt>
+                            <h3 class="card-text fs-6 fw-semibold d-inline py-3">Currencies: </h3>
+                            <h3 class="card-text fs-6 fw-normal d-inline py-3" id="currencies"></h3>
+                        </dt>
+                        <dt>
+                            <h3 class="card-text fs-6 fw-semibold d-inline py-3">Languages: </h3>
+                            <h3 class="card-text fs-6 fw-normal d-inline py-3" id="languages"></h3>
+                        </dt>
                     </div>
                 </div>
                 <div class="col-12 col-sm-12 col-md-6 col-lg-6 d-inline" id="border-countries">
                     <h3 class="card-text fs-6 fw-semibold py-3 d-lg-inline d-sm-block">Border Countries:</h3>
                 </div>
-                
+
             </div>
         </div>
     </main>
@@ -55,7 +83,8 @@
     <script>
         let parameter = new URLSearchParams(window.location.search);
         let countryCode = parameter.get("countryCode");
-        init ('details','flag', `${countryCode}`, 'border-countries');
+        init('details', 'flag', `${countryCode}`, 'border-countries');
     </script>
-  </body>
+</body>
+
 </html>

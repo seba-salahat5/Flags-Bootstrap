@@ -3,43 +3,53 @@ async function init (elementId, flagDiv, countryCode, borderCountriesDivId) {
     let fields = ['flag','borders','name', 'native', 'population', 'region', 'subRegion' , 'capital' , 'tld', 'currencies', 'languages'];
     let data = [];
     let info ;
-    
-    info = await fetchCountries(`${apiUrl}${countryCode}`);
-    data = [
-        `${info[0].flags.svg}`,
-        `${info[0].borders}`,
-        `${info[0].name.common}`,
-        `${Object.entries(info[0].name.nativeName)[0][1].common}`,
-        `${info[0].population}`,
-        `${info[0].region}`,
-        `${info[0].subregion}`,
-        `${info[0].capital}`,
-        `${info[0].tld}`,
-        `${Object.entries(info[0].currencies)[0][1].name}`,
-        `${Object.values(info[0].languages).join(', ')}`,
-    ];
-    displayDetails (elementId, flagDiv,fields, data );
-    loadBorderCountries (fetchCountries, apiUrl, data[1], async(borderCountry)=> {
-        console.log("inside call back");
-        displayBorderCountries(borderCountry, borderCountriesDivId, ()=> {applyMode(localStorage.getItem('darkMode'))});
-    });
 
-    applyMode(localStorage.getItem('darkMode'));
-    
+    try {
+        let response = await fetch(`${apiUrl}${countryCode}`);
 
+        if(!response.ok) {
+            throw new Error(`Failed to fetch countries: ${response.status}`);
+        }
+        info = await response.json();
+        data = [
+            info[0].flags.svg,
+            info[0].borders,
+            info[0].name.common,
+            Object.entries(info[0].name.nativeName)[0][1].common,
+            info[0].population,
+            info[0].region,
+            info[0].subregion,
+            info[0].capital,
+            info[0].tld,
+            Object.entries(info[0].currencies)[0][1].name,
+            Object.values(info[0].languages).join(', '),
+        ];
+        displayDetails (elementId, flagDiv,fields, data );
+        if(data[1]){
+            console.log(data[1]);
+            loadBorderCountries (apiUrl, data[1], async(borderCountry)=> {
+                displayBorderCountries(borderCountry, borderCountriesDivId, ()=> {applyMode(localStorage.getItem('darkMode'))});
+            });
+        }    
+        applyMode(localStorage.getItem('darkMode'));
+    }catch (e) {
+        console.log(e);
+    }
 }
 
-function loadBorderCountries (fetch, api, borderCodes, cb){
-    let CodesArr = borderCodes.split(',');
-    for(let borderIndex=0; borderIndex < CodesArr.length; borderIndex++){
-        fetch(`${api}${CodesArr[borderIndex]}`).then(country => {
-            if(!country) {
-                console.log("Border Country Not Found!");
+async function loadBorderCountries (api, borderCodes, cb){
+    for(let borderIndex=0; borderIndex < borderCodes.length; borderIndex++){
+        try {
+            let response = await fetch(`${api}${borderCodes[borderIndex]}`);
+            if(!response.ok) {
+                throw new Error(`Failed to fetch countries: ${response.status}`);
             }
+            let country = await response.json();
             cb(country[0].name.common);
-        }).catch( e =>  {console.log(e);});  
+        }catch (e) {
+            console.log(e);
+        }
     }
-    //return borderCountries;
     
 }
 
@@ -50,14 +60,11 @@ function displayDetails (elementId, flagDiv,fields, data) {
 
     for( let i=2; i< fields.length; i++)
     {
-        //console.log(document.getElementById(`${fields[i]}`));
         document.getElementById(`${fields[i]}`).innerText = data[i];
     }
 }
 
 function displayBorderCountries(borderCountry, divId, cb) {
-    console.log(borderCountry);
-    
     let bordersDiv = document.getElementById(divId);
     bordersDiv.appendChild(createButton(borderCountry));
     cb();

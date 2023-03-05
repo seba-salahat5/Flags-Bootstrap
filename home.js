@@ -1,75 +1,71 @@
+let favouratesList = JSON.parse(localStorage.getItem('favouratesList'));
+let dragged = null;
+var localStorageValue;
+let notduplicated=false;
 async function initial(rowId, searchFieldId, menuID) {
     let APIUrl = 'https://restcountries.com/v3.1';
     let countries = [];
     let selectedRegion = 'No Filter';
     let inputStr = '';
 
-    searchEvent(searchFieldId,inputStr, async (inputStr) => {
-        let searchResult = [];
-        loadCountries(APIUrl,inputStr,rowId, selectedRegion).then (res =>{
-            if(!res) {
-                console.log("error");
-                return;
-            }
-
-            for(let country of res) {
-                if(country.region == selectedRegion || selectedRegion == 'No Filter'){
-                    searchResult.push(country);
-                }
-            }
-            countries = searchResult;
-            displayCountries(rowId, countries, ()=> applyMode());
-            //console.log(countries.length);
+    searchEvent(searchFieldId, inputStr, async (inputStr) => {
+        loadCountries(APIUrl, inputStr).then(res => {
+            selectedRegion == 'Favourites'
+            ? countries = favouratesList
+            : countries = res.filter(country => country.region == selectedRegion || selectedRegion == 'No Filter');
+            displayCountries(rowId, countries, () => {
+                applyMode();
+                fillStar(favouratesList);
+            });
         });
     });
 
-    selectFilter(menuID, selectedRegion, (filter)=> {
+    selectFilter(menuID, selectedRegion, (filter) => {
+        let filteredCountries = [];
         selectedRegion = filter;
-        console.log("inside call back"+ selectedRegion);
-        let filteredCountries = filterCountries(selectedRegion,countries);
-        displayCountries(rowId, filteredCountries, ()=> applyMode());
+        selectedRegion == 'Favourites'
+        ? filteredCountries = favouratesList
+        : filteredCountries= countries.filter(country => country.region == selectedRegion || selectedRegion == 'No Filter');
+        displayCountries(rowId, filteredCountries, () => {
+            applyMode();
+            fillStar(favouratesList);
+        });
     });
 
-    fetchCountries(`${APIUrl}/all`).then( responseData => {
-        if(!responseData) {
-            return;
-        }
-
-        for(let country of responseData) {
-            countries.push(country);
-        }
-        displayCountries (rowId,countries, ()=> applyMode());
-        console.log(countries.length);
-    }).catch( e=> {
-        console.log(e);
-    });
-
-    countries = filterCountries(selectedRegion,countries);
-    displayCountries(rowId, countries, ()=> applyMode());
-
-
-    
-}
-
-async function fetchCountries(url) {
     try {
-        let response = await fetch(`${url}`);
+        let response = await fetch(`${APIUrl}/all`);
 
-        if(!response.ok) {
+        if (!response.ok) {
             throw new Error(`Failed to fetch countries: ${response.status}`);
         }
-        return await response.json();
-    }catch (e) {
+        let responseData = await response.json();
+        for (let country of responseData) {
+            countries.push(country);
+        }
+        displayCountries(rowId, countries, () => {
+            applyMode();
+            fillStar(favouratesList);
+        });
+        console.log(favouratesList);
+        if(favouratesList){
+            for(let favourateItem of favouratesList){
+                document.getElementById("droptarget").appendChild(createFavouriteItem(favourateItem));
+            }
+        }
+        
+    } catch (e) {
         console.log(e);
     }
+
 }
 
-function displayCountries(rowId, fetchedCountries, cb){
+
+function displayCountries(rowId, fetchedCountries, cb) {
     let currentRow = document.getElementById(rowId);
     let parentElement = currentRow.parentNode;
 
     let newRow = createRow(rowId);
-    if(fetchedCountries.length == 0) {
+    if (fetchedCountries.length == 0) {
         let msg = createH5('No results Found');
         newRow.appendChild(msg);
         parentElement.removeChild(currentRow);
@@ -77,11 +73,11 @@ function displayCountries(rowId, fetchedCountries, cb){
         return;
     }
 
-    if(!fetchedCountries) {
+    if (!fetchedCountries) {
         return;
     }
 
-    for(let country of fetchedCountries) {
+    for (let country of fetchedCountries) {
         newRow.appendChild(createColumn(country));
     }
     parentElement.removeChild(currentRow);
@@ -89,92 +85,139 @@ function displayCountries(rowId, fetchedCountries, cb){
     cb();
 }
 
-function selectFilter (listId,selectedRegion ,cb) {
+function selectFilter(listId, selectedRegion, cb) {
     let items = document.querySelectorAll(listId);
-    let tab =[];
 
-    for(let i=0; i< items.length; i++) {
-        tab.push(items[i].innerHTML);
-    }
-
-    for(let i=0; i<items.length; i++){
-        items[i].onclick = function (){
-        index = tab.indexOf(this.innerHTML);
-        selectedRegion = this.innerHTML;
-        console.log(this.innerHTML + " index: "+ index);
-        cb(selectedRegion);
+    for (let i = 0; i < items.length; i++) {
+        items[i].onclick = function () {
+            selectedRegion = this.innerHTML;
+            cb(selectedRegion);
         };
     }
 
 }
 
-function filterCountries(region, allCountries){
-    let filteredCountries = [];
-    for(let country of allCountries) {
-        if((country.region === region) || (region === 'No Filter') ){
-            filteredCountries.push(country);
-        }
-    }
 
-    return filteredCountries;
-}
-
-function searchEvent (searchFieldId,inputStr, cb){
-    //let inputStr ='';
+function searchEvent(searchFieldId, inputStr, cb) {
     let searchTextField = document.getElementById(`${searchFieldId}`);
     searchTextField.addEventListener('keyup', async (e) => {
-        if (`${e.key}` === 'Backspace'){
-            inputStr = inputStr.slice(0, inputStr.length -1);  
-        }
-        else if(`${e.key}`.length === 1){
-            inputStr = inputStr + `${e.key}`;
-        }
-        console.log(inputStr);
-        cb(inputStr);
+        setTimeout(() => {
+            inputStr = e.target.value ?? '';
+            cb(inputStr);
+        }, 500);
+
     });
 }
 
-function loadCountries(APIUrl,searchValue){
-    console.log("loading");
-    console.log("APIUrl: "+APIUrl);
-    console.log("searchValue: "+ searchValue);
-
-   
+async function loadCountries(APIUrl, searchValue) {
     let url = '';
-    searchValue == ''? url = `${APIUrl}/all` : url= `${APIUrl}/name/${searchValue}`
-    return fetchCountries(url).then( (response) => response)
-    .catch( e => {
+    searchValue == '' ? url = `${APIUrl}/all` : url = `${APIUrl}/name/${searchValue}`;
+    /*const controller = new AbortController();
+    const {signal} = controller;
+    fetch(url, {signal})
+    .then((response)=>response.json())
+    .then((data)=>{return data });*/
+
+    try {
+        let response = await fetch(url);
+        if (!response.ok) {
+            throw new Error(`Failed to fetch countries: ${response.status}`);
+        }
+        return await response.json();
+    } catch (e) {
         console.log(e);
-    });
+    }
+
 }
 
 
- 
+
 function DisplayDetails(countryCode) {
     let parameter = new URLSearchParams();
     parameter.append("countryCode", `${countryCode}`);
-    console.log(countryCode);
-    //location.href = "file:///C:/Users/hp/Desktop/Flags-Bootstrap/details.html?" + parameter.toString();
-    location.href = "https://seba-salahat5.github.io/Flags-Bootstrap/details?" + parameter.toString();
-    
+    location.href = "file:///C:/Users/hp/Desktop/Flags-Bootstrap/details.html?" + parameter.toString();
+    //location.href = "https://seba-salahat5.github.io/Flags-Bootstrap/details?" + parameter.toString();
+
 }
 
+function initializeTarget(){
+    const target = document.getElementById("droptarget");
+    console.log(target);
+    target.addEventListener("dragover", (event) => {
+        event.target.style.border= "2px solid transparent";
+        event.target.style.borderColor ="#27ae60";
+        event.preventDefault();
+    });
+
+    target.addEventListener("dragleave", (event) => {
+        event.target.style.border= "2px solid transparent";
+        event.preventDefault();
+    });
+
+    target.addEventListener("drop", (event) => {
+        addToFavourate(dragged.country);
+        if(notduplicated){
+            event.preventDefault();
+            if (event.target.id == "droptarget") {
+                event.target.appendChild(createFavouriteItem(dragged.country));
+                event.target.style.border= "2px solid transparent";
+            }
+        }
+    });
+}
+function addToFavourate(country){
+    if(!favouratesList){
+        favouratesList=[];
+    }
+    if(!favouratesList.some((element) => element.cca2 == country.cca2)){
+        favouratesList.push(country);
+        setInLocalStorage('favouratesList',favouratesList);
+        notduplicated = true;
+    }
+}
+function removeFromFavouritesBar(countryToRemove, spanId){
+    removeCountryFromList(countryToRemove);
+    let favourteItem = document.getElementById(spanId);
+    favourteItem.parentNode.removeChild(favourteItem);
+}
+
+function removeCountryFromList(countryToRemove){
+    const index = favouratesList.findIndex((country) => country.cca2 == countryToRemove);
+    favouratesList.splice(index, 1);
+    setInLocalStorage('favouratesList',favouratesList);
+}
+
+//local storage
+function setInLocalStorage(key, value){
+    try{
+        localStorage.setItem(key, JSON.stringify(value));
+    }catch(err){
+        localStorageValue = {key: key, value:value};
+    }
+}
+
+function getFromLocalStorage(key){
+    try{
+        return JSON.parse(localStorage.getItem(key));
+    }catch(err){
+        return window.localStorageValue;
+    }
+}
 // dark mode
 function switchMode() {
-    let darkMode = localStorage.getItem('darkMode');
-    console.log("before: "+darkMode);
-
-    darkMode == 'true' ? darkMode = 'false' : darkMode='true';
-    localStorage.setItem('darkMode', darkMode);
+    let darkMode = getFromLocalStorage('darkMode');
+    darkMode = !darkMode;
+    setInLocalStorage('darkMode', darkMode);
     applyMode();
 
 
 }
 
-function applyMode(){
-    let darkModeStatus = localStorage.getItem('darkMode');
+function applyMode() {
+    let darkModeStatus = getFromLocalStorage('darkMode');
+    console.log(darkModeStatus);
     let body = document.body;
-    let elements = document.querySelectorAll(".white"); 
+    let elements = document.querySelectorAll(".white");
 
     let bgColor = "white";
     let fontColor = "#111517";
@@ -183,7 +226,7 @@ function applyMode(){
     body.style.backgroundColor = "#fafafa";
     body.style.color = "#111517";
 
-    if(darkModeStatus == 'true'){
+    if (darkModeStatus) {
         document.getElementById("btn").innerHTML = "Light Mode";
         body.style.backgroundColor = "#202c37";
         body.style.color = "white";
@@ -193,91 +236,82 @@ function applyMode(){
     }
 
     for (let i = 0; i < elements.length; i++) {
-        elements[i].style.backgroundColor= bgColor;
+        elements[i].style.backgroundColor = bgColor;
         elements[i].style.color = fontColor;
     }
-        
 }
+
 
 // view 
 function createRow(rowId) {
     let row = document.createElement('div');
-    row.setAttribute('class', 'row row-cols-lg-4 row-cols-md-3  row-cols-sm-2 row-cols-1 g-5');
+    row.setAttribute('class', 'row row-cols-lg-3 row-cols-md-2  row-cols-sm-2 row-cols-1 g-5');
     row.setAttribute('id', `${rowId}`);
     return row;
 }
 
-function createColumn (country) {
+function createColumn(country) {
+    let countryStr = JSON.stringify(country);
+    countryStr = countryStr.replaceAll('"', "'");
+    //console.log(`'${countryStr}'`);
     let column = document.createElement('div');
-    column.setAttribute ('class', 'col');
-
-    let card = createCard(country);
-    column.appendChild(card);
+    column.setAttribute('class', 'col');
+    column.setAttribute('draggable', "true");
+    column.setAttribute('id', "draggable");
+    column.addEventListener("dragstart", (event) => {
+        console.log("drag");
+        dragged = {event: event.target, country:country};
+        initializeTarget();
+    });
+    column.innerHTML = `
+    <div class="card h-100 white">
+        <div onclick = "DisplayDetails('${country.cca2}')">
+            <img class="card-img-top" src=${country.flags.svg} alt=${country.name.common}>
+            <div class="card-body" id="${country.name.common}">
+                <h5 class="card-title text-start fw-bold">${country.name.common}</h5>
+                <h6><span class="fw-bold">Population: </span><span>${country.population}</sapn></h6>
+                <h6><span class="fw-bold">Region: </span><span>${country.region}</sapn></h6>
+                <h6><span class="fw-bold">Capital: </span><span>${country.capital}</sapn></h6>
+            </div>
+        </div>
+        <div class="d-none d-sm-flex d-lg-none flex-row-reverse py-2 px-2">
+            <i class="fa-regular fa-star" id="${country.cca2}-starIcon" onclick= "changeIcon(this,${countryStr})"></i>
+        </div>
+    </div>`;
     return column;
 }
 
-function createCard (country) {
-    let card = document.createElement('div');
-    card.setAttribute('class', 'card h-100 white');
-    //card.setAttribute('onclick', DisplayDetails(country.cca2));
-    card.onclick = function() {
-        DisplayDetails(country.cca2);
-    };
-
-    let img = createImg(country.flags.svg, country.name.common);
-    card.appendChild(img);
-
-    let cardBody = document.createElement('div');
-    cardBody.setAttribute ('class', 'card-body');
-    cardBody.setAttribute ('id', `${country.name.common}`);
-
-    let name = createH5(`${country.name.common}`);
-    let population = createH6('Population: ', `${country.population}`);
-    let region = createH6('Region: ', `${country.region}`);
-    let capital = createH6('Capital: ', `${country.capital}`);
-
-    cardBody.appendChild(name);
-    cardBody.appendChild(population);
-    cardBody.appendChild(region);
-    cardBody.appendChild(capital);
-    
-    card.appendChild(cardBody);
-    return card;
-}
-
-function createImg (src, alt) {
-    let img = document.createElement('img');
-    img.setAttribute('class', 'card-img-top');
-    img.setAttribute('src', `${src}`);
-    img.setAttribute('alt', `${alt}`);
-
-    return img;
-}
-
-function createH5 (str) {
-    let h5 = document.createElement('h5');
-    h5.setAttribute ('class', 'card-title text-start fw-bold');
-    h5.setAttribute ('id', `country-${str}-name`);
-    h5.innerText = str;
-    return h5;
-}
-
-function createSpan (str, title){
-    let span = document.createElement('span');
-    if(title){
-        span.setAttribute('class', 'fw-bold');
+function changeIcon(icon, country){
+    let class_name = icon.className.split(" ");
+    icon.classList.toggle("fa-solid");
+    if(class_name.length == 2){
+        addToFavourate(country);
     }
-    span.innerText = str;
-    return span;
+    else {
+        removeCountryFromList(country);
+    }
 }
-function createH6 (title, value) {
-    let titleSpan = createSpan (`${title}`, true);
-    let valueSpan = createSpan (`${value}`, false);
 
-    let h6 = document.createElement('h6');
-    h6.setAttribute('class', 'text-start');
-
-    h6.appendChild(titleSpan);
-    h6.appendChild(valueSpan);
-    return h6;
+function createFavouriteItem(favouriteCountry){
+    let favourateItem = document.createElement('span');
+    favourateItem.setAttribute('class','d-flex justify-content-between my-2');
+    favourateItem.setAttribute('id',`favorate-span-${favouriteCountry.cca2}`);
+    favourateItem.innerHTML = `
+    <span>
+        <img class="favorite-card-img rounded" src= ${favouriteCountry.flags.svg}>
+        <h5 class="mx-2 d-inline fw-bold">${favouriteCountry.name.common}</h5>
+    </span>
+    <i class="fa-solid fa-circle-xmark" id="close" onclick="removeFromFavouritesBar('${favouriteCountry.cca2}','favorate-span-${favouriteCountry.cca2}' )"></i>`;
+    return favourateItem;
+}
+function fillStar(favorites){
+    if(favorites){
+        for(let favourateCountry of favorites){
+            let icon = document.getElementById(`${favourateCountry.cca2}-starIcon`);
+            if(icon){
+                icon.setAttribute('class', "fa-regular fa-star fa-solid");      
+            } 
+        }
+    }
+    
 }

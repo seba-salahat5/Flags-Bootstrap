@@ -11,18 +11,19 @@ body {
 
 .darkmode {
     background-color: #202c37;
-	color: white;
-} 
+    color: white;
+}
 
 .btn {
     --bs-btn-font-weight: 600;
 }
 
-header h1{
+header h1 {
     padding-top: 0.45rem;
     padding-bottom: 0.25rem;
 }
-.btn-group-sm >.btn {
+
+.btn-group-sm>.btn {
     --bs-btn-padding-x: 1.7rem;
     --bs-btn-padding-y: 0.4rem;
 }
@@ -31,12 +32,40 @@ header h1{
     --bs-dropdown-min-width: 11rem;
 }
 
-.g-5, .gy-5 {
-    --bs-gutter-y: 5.5rem;
+.container-fluid{
+    padding-left: 0rem;
+    padding-right: 0rem;
+    margin-left: 0rem;
+    margin-right: 0rem;
+}
+.g-5,
+.gy-5 {
+    --bs-gutter-y: 3.5rem;
 }
 
-.g-5, .gx-5 {
-    --bs-gutter-x: 5.5rem;
+.g-5,
+.gx-5 {
+    --bs-gutter-x: 3.5rem;
+}
+
+.g-4,
+.gy-4 {
+    --bs-gutter-y: 0rem;
+}
+
+.g-4,
+.gx-4 {
+    --bs-gutter-x: 3.5rem;
+}
+
+.px-5 {
+    padding-right: 4rem!important;
+    padding-left: 4rem!important;
+}
+
+.py-3 {
+    padding-top: 1rem!important;
+    padding-bottom: 0rem!important;
 }
 
 .card-img-top {
@@ -44,12 +73,27 @@ header h1{
     object-fit: cover;
 }
 
+h3 {
+    font-size: 1.25rem;
+}
+
 h5 {
     font-size: 1.0rem;
 }
+
 h6 {
     font-size: 0.75rem;
 }
 
+.favorite-card-img{
+    height: 4vh;
+    width: 4vw;
+    object-fit: cover;
+}
+#close {
+    color: lightgray;
+}
 
-  
+.fa-star{
+    color: orange;
+}
