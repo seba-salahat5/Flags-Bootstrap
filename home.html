@@ -24,15 +24,13 @@
       Mode</button>
   </header>
   <main class="container-fluid px-5 py-2 my-4">
-    <div class="d-xs-block d-sm-flex justify-content-between ">
-      <div class="white shadow-sm input-group w-auto rounded-1 mb-4 my-4">
+    <div class="d-xs-block d-sm-flex justify-content-between">
+      <div class="white shadow-sm input-group rounded-1 mb-4 my-4">
         <span class="white input-group-text border-0"><i class="fa-solid fa-magnifying-glass fs-6"></i></span>
-        <input class="form-control me-2 border-0 rounded-1 white" type="search" placeholder="Search for a country..."
-          aria-label="Search" id="searchField">
-
+        <input class="form-control me-2 border-0 rounded-1 white" type="search" placeholder="Search for a country..." aria-label="Search" id="searchField">
       </div>
-      <div class="btn-group-sm my-4" role="group">
-        <button type="button" class="white btn dropdown-toggle shadow-sm" data-bs-toggle="dropdown"
+      <div class="btn-group-sm" role="group">
+        <button type="button" class="white btn dropdown-toggle shadow-sm my-4" data-bs-toggle="dropdown"
           aria-expanded="false">
           Filter by
         </button>
@@ -47,10 +45,10 @@
         </ul>
       </div>
     </div>
-    <div class="row container-fluid my-4 g-4">
-      <div class= "col-lg-3 white shadow rounded px-3 d-none d-lg-block" id="droptarget">
-        <h3 class="fw-bold py-3"  >Favourites</h3>
-        <div class="py-2">
+    <div class="row container-fluid my-4">
+      <div class="col-lg-3 white shadow rounded favourates-bar px-3 d-none d-lg-block" id="droptarget">
+        <h3 class="fw-bold py-3">Favourites</h3>
+        <div>
         </div>
       </div>
       <div class="col-lg-9">
@@ -63,7 +61,7 @@
   </main>
   <script src="home.js"></script>
   <script>
-    initial('row', 'searchField', '#dropdown-menu li a');
+    initial('row', 'searchField', '#dropdown-menu li a', 'droptarget');
   </script>
 </body>
 

@@ -1,17 +1,28 @@
+:root {
+    --light_mode_bg: #fafafa;
+    --light_mode_element_bg: white;
+    --dark_mode_bg: #202c37;
+    --dark_mode_element_bg: #2b3945;
+    --light_mode_font_color: #111517;
+    --dark_mode_font_color: white;
+    --close_icon_bg: lightgray;
+    --star_icon_bg: orange;
+}
+
 body {
     font-family: 'Nunito Sans', sans-serif;
     box-sizing: border-box;
-    background-color: #fafafa;
+    background-color: var(--light_mode_bg);
 }
 
 .white {
-    background-color: white;
-    color: #111517;
+    background-color: var(--light_mode_element_bg);
+    color: var(--light_mode_font_color);
 }
 
 .darkmode {
-    background-color: #202c37;
-    color: white;
+    background-color: var(--dark_mode_bg);
+    color: var(--dark_mode_font_color);
 }
 
 .btn {
@@ -29,15 +40,16 @@ header h1 {
 }
 
 .dropdown-menu {
-    --bs-dropdown-min-width: 11rem;
+    --bs-dropdown-min-width: 10rem;
 }
 
-.container-fluid{
+.container-fluid {
     padding-left: 0rem;
     padding-right: 0rem;
     margin-left: 0rem;
     margin-right: 0rem;
 }
+
 .g-5,
 .gy-5 {
     --bs-gutter-y: 3.5rem;
@@ -59,18 +71,38 @@ header h1 {
 }
 
 .px-5 {
-    padding-right: 4rem!important;
-    padding-left: 4rem!important;
+    padding-right: 4rem !important;
+    padding-left: 4rem !important;
 }
 
 .py-3 {
-    padding-top: 1rem!important;
-    padding-bottom: 0rem!important;
+    padding-top: 1rem !important;
+    padding-bottom: 0rem !important;
 }
+
+.input-group {
+    width: 32vw;
+}
+
+#searchField {
+    height: 2.5rem;
+}
+
+.dropdown-toggle {
+    width: 10rem;
+    height: 2.5rem;
+}
+
 
 .card-img-top {
     height: 20vh;
     object-fit: cover;
+}
+
+.row>* {
+    padding-right: 0rem;
+    padding-left: 2.5rem;
+
 }
 
 h3 {
@@ -85,15 +117,20 @@ h6 {
     font-size: 0.75rem;
 }
 
-.favorite-card-img{
+.favourates-bar {
+    width: 20vw;
+}
+
+.favorite-card-img {
     height: 4vh;
     width: 4vw;
     object-fit: cover;
 }
+
 #close {
-    color: lightgray;
+    color: var(--close_icon_bg);
 }
 
-.fa-star{
-    color: orange;
+.fa-star {
+    color: var(--star_icon_bg);
 }
