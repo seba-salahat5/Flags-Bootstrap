@@ -3,22 +3,21 @@ async function initial(rowId, searchFieldId, menuID, dropTargetId) {
     let countries = [];
     let selectedRegion = 'No Filter';
     let inputStr = '';
-    let favouratesList = getFromLocalStorage('favouratesList');
     let draggedElement = null;
     searchEvent(searchFieldId, inputStr, async (inputStr) => {
         loadCountries(APIUrl, inputStr).then(res => {
+            let favouratesList = getFromLocalStorage('favouratesList');
             countries = res.filter(country => country.region == selectedRegion
                 || selectedRegion == 'No Filter'
                 || (selectedRegion == 'Favourites' && favouratesList.some((element) => element.cca2 == country.cca2)));
             displayCountries(rowId, countries, draggedElement, dropTargetId, () => {
                 applyMode();
-                let filteredFavourates = filteredCountries.filter(favouratesList.some((element) => element.cca2 == country.cca2));
-                displayFavourateList(filteredFavourates, dropTargetId);
                 fillStar();
             });
         });
     });
     selectFilter(menuID, selectedRegion, (filter) => {
+        let favouratesList = getFromLocalStorage('favouratesList');
         let filteredCountries = [];
         selectedRegion = filter;
         selectedRegion == 'Favourites'
@@ -27,8 +26,6 @@ async function initial(rowId, searchFieldId, menuID, dropTargetId) {
         displayCountries(rowId, filteredCountries, draggedElement, dropTargetId, () => {
             applyMode();
             fillStar();
-            let filteredFavourates = filteredCountries.filter(country => favouratesList.some((element) => element.cca2 == country.cca2));
-            displayFavourateList(filteredFavourates, dropTargetId);
         });
     });
     try {
@@ -43,13 +40,14 @@ async function initial(rowId, searchFieldId, menuID, dropTargetId) {
         displayCountries(rowId, countries, draggedElement, dropTargetId, () => {
             applyMode();
             fillStar();
-            displayFavourateList(favouratesList, dropTargetId);
+            displayFavourateList(dropTargetId);
         });
     } catch (e) {
         console.log(e);
     }
 }
-function displayFavourateList(favouratesList, dropTargetId) {
+function displayFavourateList(dropTargetId) {
+    let favouratesList = getFromLocalStorage('favouratesList');
     let favouratesDiv = document.getElementById(dropTargetId);
     let innerDiv = favouratesDiv.lastChild;
     let newDiv = document.createElement('div');
