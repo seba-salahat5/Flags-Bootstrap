@@ -141,7 +141,7 @@ function initializeTarget(draggedElement, dropTargetId) {
     });
     target.addEventListener("drop", (event) => {
         let favouratesList = getFromLocalStorage('favouratesList');
-        addToFavourate(draggedElement.country, () => {fillStar() });
+        addToFavourate(draggedElement.country, () => { fillStar() });
         if (!favouratesList.some((element) => element.cca2 == draggedElement.country.cca2)) {
             event.preventDefault();
             if (event.target.id == dropTargetId) {
@@ -163,16 +163,17 @@ function addToFavourate(country, cb) {
     }
 }
 function removeFromFavouritesBar(countryToRemove, spanId) {
-    removeCountryFromList(countryToRemove, () => {fillStar() });
+    emptyStar(countryToRemove)
+    removeCountryFromList(countryToRemove, () => { });
     let favourteItem = document.getElementById(spanId);
     favourteItem.parentNode.removeChild(favourteItem);
 }
-function removeCountryFromList(countryToRemove, cb) {
+function removeCountryFromList(countryToRemove) {
     let favouratesList = getFromLocalStorage('favouratesList');
     const index = favouratesList.findIndex((country) => country.cca2 == countryToRemove);
     favouratesList.splice(index, 1);
     setInLocalStorage('favouratesList', favouratesList);
-    cb();
+
 }
 // *********************************************** Local Storage Functions **********************************************
 function setInLocalStorage(key, value) {
@@ -283,7 +284,7 @@ function createFavouriteItem(favouriteCountry) {
     return favourateItem;
 }
 function fillStar() {
-    let favorites = getFromLocalStorage('favouratesList')
+    let favorites = getFromLocalStorage('favouratesList');
     if (favorites) {
         for (let favourateCountry of favorites) {
             let icon = document.getElementById(`${favourateCountry.cca2}-starIcon`);
@@ -291,5 +292,11 @@ function fillStar() {
                 icon.setAttribute('class', "fa-regular fa-star fa-solid");
             }
         }
+    }
+}
+function emptyStar(countryToRemove) {
+    let icon = document.getElementById(`${countryToRemove}-starIcon`);
+    if (icon) {
+        icon.setAttribute('class', "fa-regular fa-star");
     }
 }
