@@ -255,7 +255,7 @@ function createColumn(country, dropTargetId) {
                 <h6><span class="fw-bold">Capital: </span><span>${country.capital}</sapn></h6>
             </div>
         </div>
-        <div class="d-lg-none d-flex flex-row-reverse py-2 px-2">
+        <div class="d-none d-sm-flex d-lg-none flex-row-reverse py-2 px-2">
             <i class="fa-regular fa-star" id="${country.cca2}-starIcon" onclick= "changeIcon(this,${countryStr},'${dropTargetId}')"></i>
         </div>
     </div>`;
