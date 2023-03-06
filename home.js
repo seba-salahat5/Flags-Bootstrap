@@ -3,14 +3,13 @@ async function initial(rowId, searchFieldId, menuID, dropTargetId) {
     let countries = [];
     let selectedRegion = 'No Filter';
     let inputStr = '';
-    let draggedElement = null;
     searchEvent(searchFieldId, inputStr, async (inputStr) => {
         loadCountries(APIUrl, inputStr).then(res => {
             let favouratesList = getFromLocalStorage('favouratesList');
             countries = res.filter(country => country.region == selectedRegion
                 || selectedRegion == 'No Filter'
                 || (selectedRegion == 'Favourites' && favouratesList.some((element) => element.cca2 == country.cca2)));
-            displayCountries(rowId, countries, draggedElement, dropTargetId, () => {
+            displayCountries(rowId, countries, dropTargetId, () => {
                 applyMode();
                 fillStar();
             });
@@ -23,7 +22,7 @@ async function initial(rowId, searchFieldId, menuID, dropTargetId) {
         selectedRegion == 'Favourites'
             ? filteredCountries = favouratesList
             : filteredCountries = countries.filter(country => country.region == selectedRegion || selectedRegion == 'No Filter');
-        displayCountries(rowId, filteredCountries, draggedElement, dropTargetId, () => {
+        displayCountries(rowId, filteredCountries, dropTargetId, () => {
             applyMode();
             fillStar();
         });
@@ -37,7 +36,7 @@ async function initial(rowId, searchFieldId, menuID, dropTargetId) {
         for (let country of responseData) {
             countries.push(country);
         }
-        displayCountries(rowId, countries, draggedElement, dropTargetId, () => {
+        displayCountries(rowId, countries, dropTargetId, () => {
             applyMode();
             fillStar();
             displayFavourateList(dropTargetId);
@@ -59,7 +58,7 @@ function displayFavourateList(dropTargetId) {
     favouratesDiv.removeChild(innerDiv);
     favouratesDiv.appendChild(newDiv);
 }
-function displayCountries(rowId, fetchedCountries, draggedElement, dropTargetId, cb) {
+function displayCountries(rowId, fetchedCountries, dropTargetId, cb) {
     let currentRow = document.getElementById(rowId);
     let parentElement = currentRow.parentNode;
     let newRow = createRow(rowId);
@@ -76,7 +75,7 @@ function displayCountries(rowId, fetchedCountries, draggedElement, dropTargetId,
         return;
     }
     for (let country of fetchedCountries) {
-        newRow.appendChild(createColumn(country, draggedElement, dropTargetId));
+        newRow.appendChild(createColumn(country, dropTargetId));
     }
     parentElement.removeChild(currentRow);
     parentElement.appendChild(newRow);
@@ -142,7 +141,7 @@ function initializeTarget(draggedElement, dropTargetId) {
     });
     target.addEventListener("drop", (event) => {
         let favouratesList = getFromLocalStorage('favouratesList');
-        addToFavourate(draggedElement.country);
+        addToFavourate(draggedElement.country, () => { });
         if (!favouratesList.some((element) => element.cca2 == draggedElement.country.cca2)) {
             event.preventDefault();
             if (event.target.id == dropTargetId) {
@@ -152,7 +151,7 @@ function initializeTarget(draggedElement, dropTargetId) {
         }
     });
 }
-function addToFavourate(country) {
+function addToFavourate(country, cb) {
     let favouratesList = getFromLocalStorage('favouratesList');
     if (!favouratesList) {
         favouratesList = [];
@@ -160,18 +159,20 @@ function addToFavourate(country) {
     if (!favouratesList.some((element) => element.cca2 == country.cca2)) {
         favouratesList.push(country);
         setInLocalStorage('favouratesList', favouratesList);
+        cb()
     }
 }
 function removeFromFavouritesBar(countryToRemove, spanId) {
-    removeCountryFromList(countryToRemove);
+    removeCountryFromList(countryToRemove, () => { });
     let favourteItem = document.getElementById(spanId);
     favourteItem.parentNode.removeChild(favourteItem);
 }
-function removeCountryFromList(countryToRemove) {
+function removeCountryFromList(countryToRemove, cb) {
     let favouratesList = getFromLocalStorage('favouratesList');
     const index = favouratesList.findIndex((country) => country.cca2 == countryToRemove);
     favouratesList.splice(index, 1);
     setInLocalStorage('favouratesList', favouratesList);
+    cb();
 }
 // *********************************************** Local Storage Functions **********************************************
 function setInLocalStorage(key, value) {
@@ -227,7 +228,7 @@ function createRow(rowId) {
     row.setAttribute('id', `${rowId}`);
     return row;
 }
-function createColumn(country, draggedElement, dropTargetId) {
+function createColumn(country, dropTargetId) {
     let countryStr = JSON.stringify(country);
     countryStr = countryStr.replaceAll('"', "'");
     let column = document.createElement('div');
@@ -235,8 +236,12 @@ function createColumn(country, draggedElement, dropTargetId) {
     column.setAttribute('draggable', "true");
     column.setAttribute('id', "draggable");
     column.addEventListener("dragstart", (event) => {
-        draggedElement = { event: event.target, country: country };
+        column.style.opacity = '0.5';
+        let draggedElement = { event: event.target, country: country };
         initializeTarget(draggedElement, dropTargetId);
+    });
+    column.addEventListener("dragend", (event) => {
+        column.style.opacity = '1';
     });
     column.innerHTML = `
     <div class="card h-100 white">
@@ -250,19 +255,19 @@ function createColumn(country, draggedElement, dropTargetId) {
             </div>
         </div>
         <div class="d-none d-sm-flex d-lg-none flex-row-reverse py-2 px-2">
-            <i class="fa-regular fa-star" id="${country.cca2}-starIcon" onclick= "changeIcon(this,${countryStr})"></i>
+            <i class="fa-regular fa-star" id="${country.cca2}-starIcon" onclick= "changeIcon(this,${countryStr},'${dropTargetId}')"></i>
         </div>
     </div>`;
     return column;
 }
-function changeIcon(icon, country) {
+function changeIcon(icon, country, dropTargetId) {
     let class_name = icon.className.split(" ");
     icon.classList.toggle("fa-solid");
     if (class_name.length == 2) {
-        addToFavourate(country);
+        addToFavourate(country, () => { displayFavourateList(dropTargetId); });
     }
     else {
-        removeCountryFromList(country);
+        removeCountryFromList(country, () => { displayFavourateList(dropTargetId); });
     }
 }
 function createFavouriteItem(favouriteCountry) {
