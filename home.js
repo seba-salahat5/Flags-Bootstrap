@@ -242,7 +242,7 @@ function createColumn(country, dropTargetId) {
         initializeTarget(draggedElement, dropTargetId);
     });
     column.addEventListener("dragend", (event) => {
-        column.style.opacity = '1';
+        column.style.opacity = '1';   
     });
     column.innerHTML = `
     <div class="card h-100 white">
