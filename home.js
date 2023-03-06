@@ -141,7 +141,7 @@ function initializeTarget(draggedElement, dropTargetId) {
     });
     target.addEventListener("drop", (event) => {
         let favouratesList = getFromLocalStorage('favouratesList');
-        addToFavourate(draggedElement.country, () => { });
+        addToFavourate(draggedElement.country, () => {fillStar() });
         if (!favouratesList.some((element) => element.cca2 == draggedElement.country.cca2)) {
             event.preventDefault();
             if (event.target.id == dropTargetId) {
@@ -163,7 +163,7 @@ function addToFavourate(country, cb) {
     }
 }
 function removeFromFavouritesBar(countryToRemove, spanId) {
-    removeCountryFromList(countryToRemove, () => { });
+    removeCountryFromList(countryToRemove, () => {fillStar() });
     let favourteItem = document.getElementById(spanId);
     favourteItem.parentNode.removeChild(favourteItem);
 }
